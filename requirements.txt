@@ -1,0 +1,11 @@
+customtkinter
+Pillow
+requests
+beautifulsoup4
+mss
+pytesseract
+opencv-python
+numpy
+win10toast
+matplotlib
+scipy

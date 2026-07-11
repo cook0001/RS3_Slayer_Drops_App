@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+dist/
+*.spec
+.env
+
+# Application Cache
+cache/
+export_*.png
+
+# Node / React
+alt1_react/node_modules/
+alt1_react/dist/
+alt1_react/.eslintcache
