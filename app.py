@@ -16,6 +16,8 @@ import time
 import csv
 import winsound
 import math
+import sys
+import ctypes
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -67,6 +69,14 @@ SLAYER_MONSTERS = [
     "Kalphite King", "Vorago", "Queen Black Dragon", "Corporeal Beast", "Vindicta", 
     "Gregorovic", "Helwyr", "Twin Furies", "Kree'arra", "General Graardor", "Commander Zilyana", "K'ril Tsutsaroth"
 ]
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 def format_number(num):
     return f"{num:,}"
@@ -147,8 +157,18 @@ class AutoTracker(threading.Thread):
 class RS3DropLookupApp(ctk.CTk):
     def __init__(self):
         super().__init__()
+        
+        # Tell Windows this is a distinct app to fix Taskbar Icon
+        try:
+            myappid = 'rs3.slayerdrops.tracker.1'
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+        except: pass
+        
         self.title("RS3 Slayer Drops")
         self.geometry("1400x900")
+        try:
+            self.iconbitmap(resource_path("icon.ico"))
+        except: pass
         
         self.current_drops = []
         self.current_info = {}

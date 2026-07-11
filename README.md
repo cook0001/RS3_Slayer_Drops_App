@@ -48,7 +48,7 @@ If you prefer a transparent overlay seamlessly integrated into your game client 
 You can build the Python script into a single, shareable executable using PyInstaller:
 ```bash
 pip install pyinstaller
-python -m PyInstaller --noconfirm --onefile --windowed --name "SlayerDrops" app.py
+python -m PyInstaller --noconfirm --onefile --windowed --icon="icon.ico" --add-data "icon.ico;." --name "SlayerDrops" app.py
 ```
 The resulting standalone executable will be located in the `dist/` directory.
 
