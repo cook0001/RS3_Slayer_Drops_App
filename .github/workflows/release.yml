@@ -53,8 +53,9 @@ jobs:
 
       - name: Upload Artifacts to Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
+          tag_name: "latest"
+          name: "Latest Build"
           files: |
             dist/SlayerDrops-Windows.exe
             dist/SlayerDrops-Linux
