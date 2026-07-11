@@ -8,8 +8,8 @@ Slayer Drops is an elite-tier drop tracker, expected profit calculator, and mons
 * **GE Market Trend Sparklines**: Hooked into the Weird Gloop API to generate 90-day price trend graphs for items over 50,000 gp. Know whether to sell or hold!
 * **Variance & Profit Predictor**: Employs binomial variance approximation to calculate a 95% confidence interval for expected profit on a given task size.
 * **Jagex Hiscores Readiness Integration**: Enter your RSN, and the app will query the official Jagex Hiscores to compare your Slayer level against monster requirements.
-* **Auto-Tracking**: 
-  * *Desktop:* Uses PyTesseract & OpenCV to read the game screen and automatically add drops to your log.
+* **Auto-Tracking (Cross-Platform)**: 
+  * *Desktop:* Uses PyTesseract & OpenCV to read the game screen and automatically add drops to your log. Works on Windows, macOS, and Linux!
   * *Alt1 Overlay:* Uses Alt1's native `@alt1/chatbox` JavaScript API for flawless, zero-overhead background chat reading.
 * **Ironman Mode**: Shifts focus strictly to High Alchemy values and removes GE prices entirely.
 
@@ -18,17 +18,21 @@ Slayer Drops is an elite-tier drop tracker, expected profit calculator, and mons
 ## 🚀 Setup & Installation
 
 ### Option 1: Standalone Desktop App (Python)
-If you prefer a standalone desktop window on your second monitor.
+If you prefer a standalone desktop window on your second monitor. Fully supported on Windows, macOS, and Linux.
 1. Install **Python 3.10+**.
 2. Install the required libraries:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run the application:
+3. **Optional Auto-Tracker Requirements**:
+   To use the screen-reading Auto-Tracker, you must have Tesseract OCR installed on your system:
+   * **Windows:** Install the Tesseract binary (`C:\Program Files\Tesseract-OCR\tesseract.exe`).
+   * **macOS:** `brew install tesseract`
+   * **Linux:** `sudo apt install tesseract-ocr`
+4. Run the application:
    ```bash
    python app.py
    ```
-*(Note: To use the Auto-Tracker feature on the desktop app, you must install the Tesseract-OCR binary on your system).*
 
 ### Option 2: Alt1 Toolkit Overlay (React / Vite)
 If you prefer a transparent overlay seamlessly integrated into your game client via the Alt1 Toolkit.
@@ -44,13 +48,22 @@ If you prefer a transparent overlay seamlessly integrated into your game client 
    ```
 4. Open the **Alt1 Toolkit**, go to `Browser`, and type in `http://localhost:5173`. Alternatively, point Alt1 directly to the `appconfig.json` inside the `alt1_web` legacy folder.
 
-## 📦 Compiling to .exe
-You can build the Python script into a single, shareable executable using PyInstaller:
+## 📦 Compiling to Standalone Executable
+You can build the Python script into a single, shareable executable using PyInstaller. 
+
+**Windows:**
 ```bash
 pip install pyinstaller
 python -m PyInstaller --noconfirm --onefile --windowed --icon="icon.ico" --add-data "icon.ico;." --name "SlayerDrops" app.py
 ```
-The resulting standalone executable will be located in the `dist/` directory.
+**macOS / Linux:**
+```bash
+pip install pyinstaller
+python -m PyInstaller --noconfirm --onefile --windowed --icon="icon.ico" --add-data "icon.ico:." --name "SlayerDrops" app.py
+```
+*(Note: macOS/Linux use a colon `:` separator for `--add-data` instead of a semicolon `;`).*
+
+The resulting standalone executable will be located in the `dist/` directory. On Mac, it will generate a `.app` bundle.
 
 ---
 *Created for RuneScape 3. Not affiliated with Jagex.*

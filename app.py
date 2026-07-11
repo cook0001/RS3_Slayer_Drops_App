@@ -17,14 +17,17 @@ import csv
 import winsound
 import math
 import sys
-import ctypes
+import platform
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 try:
-    from win10toast import ToastNotifier
-    toaster = ToastNotifier()
+    if platform.system() == "Windows":
+        from win10toast import ToastNotifier
+        toaster = ToastNotifier()
+    else:
+        toaster = None
 except ImportError:
     toaster = None
 
@@ -117,9 +120,16 @@ class AutoTracker(threading.Thread):
         self.running = True
         self.daemon = True
         self.tesseract_installed = False
-        paths = [r'C:\Program Files\Tesseract-OCR\tesseract.exe', r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe']
+        
+        if platform.system() == "Windows":
+            paths = [r'C:\Program Files\Tesseract-OCR\tesseract.exe', r'C:\Program Files (x86)\Tesseract-OCR\tesseract.exe']
+        elif platform.system() == "Darwin": # macOS
+            paths = ['/opt/homebrew/bin/tesseract', '/usr/local/bin/tesseract']
+        else: # Linux
+            paths = ['/usr/bin/tesseract']
+            
         for p in paths:
-            if os.path.exists(p):
+            if os.path.exists(p) or os.system(f"which {p} > /dev/null 2>&1") == 0:
                 pytesseract.pytesseract.tesseract_cmd = p
                 self.tesseract_installed = True
                 break
@@ -159,10 +169,12 @@ class RS3DropLookupApp(ctk.CTk):
         super().__init__()
         
         # Tell Windows this is a distinct app to fix Taskbar Icon
-        try:
-            myappid = 'rs3.slayerdrops.tracker.1'
-            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-        except: pass
+        if platform.system() == "Windows":
+            try:
+                import ctypes
+                myappid = 'rs3.slayerdrops.tracker.1'
+                ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+            except: pass
         
         self.title("RS3 Slayer Drops")
         self.geometry("1400x900")
@@ -597,10 +609,20 @@ class RS3DropLookupApp(ctk.CTk):
             ctk.CTkButton(row, text="+1", width=40, font=ctk.CTkFont(weight="bold"), command=lambda item=d: self.add_to_tracker(item)).pack(side="right", padx=10)
 
     def trigger_alert(self, item_name, price):
-        if toaster:
-            threading.Thread(target=toaster.show_toast, args=("Epic Drop!", f"You received {item_name} worth {format_number(price)} gp!", "icon.ico", 5), daemon=True).start()
-        try: winsound.PlaySound("SystemAsterisk", winsound.SND_ALIAS | winsound.SND_ASYNC)
-        except: pass
+        msg = f"You received {item_name} worth {format_number(price)} gp!"
+        if platform.system() == "Windows":
+            if toaster:
+                threading.Thread(target=toaster.show_toast, args=("Epic Drop!", msg, "icon.ico", 5), daemon=True).start()
+            try: 
+                import winsound
+                winsound.PlaySound("SystemAsterisk", winsound.SND_ALIAS | winsound.SND_ASYNC)
+            except: pass
+        elif platform.system() == "Darwin":
+            os.system(f"""osascript -e 'display notification "{msg}" with title "Epic Drop!"'""")
+            os.system("afplay /System/Library/Sounds/Glass.aiff &")
+        else:
+            os.system(f"""notify-send "Epic Drop!" "{msg}" &""")
+            print('\a') # Terminal beep fallback
 
     def add_to_tracker(self, drop_data, qty_add=1):
         name = drop_data["item"]
