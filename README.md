@@ -1,6 +1,6 @@
-# ⚔️ Slayer Drops Pro (RS3)
+# ⚔️ Slayer Drops (RS3)
 
-Slayer Drops Pro is an elite-tier drop tracker, expected profit calculator, and monster strategy guide for RuneScape 3. It features two distinct clients to fit your playstyle: a feature-rich **Standalone Desktop App** and a seamless **Alt1 Toolkit Web Overlay**.
+Slayer Drops is an elite-tier drop tracker, expected profit calculator, and monster strategy guide for RuneScape 3. It features two distinct clients to fit your playstyle: a feature-rich **Standalone Desktop App** and a seamless **Alt1 Toolkit Web Overlay**.
 
 ## 🌟 Key Features
 
@@ -48,7 +48,7 @@ If you prefer a transparent overlay seamlessly integrated into your game client 
 You can build the Python script into a single, shareable executable using PyInstaller:
 ```bash
 pip install pyinstaller
-python -m PyInstaller --noconfirm --onefile --windowed --name "SlayerDropsPro" app.py
+python -m PyInstaller --noconfirm --onefile --windowed --name "SlayerDrops" app.py
 ```
 The resulting standalone executable will be located in the `dist/` directory.
 

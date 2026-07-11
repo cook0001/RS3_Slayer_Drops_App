@@ -147,7 +147,7 @@ class AutoTracker(threading.Thread):
 class RS3DropLookupApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("RS3 Slayer Drops Pro Elite")
+        self.title("RS3 Slayer Drops")
         self.geometry("1400x900")
         
         self.current_drops = []
@@ -174,7 +174,7 @@ class RS3DropLookupApp(ctk.CTk):
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
         self.sidebar_frame.grid_rowconfigure(11, weight=1)
 
-        self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Slayer Drops Pro", font=ctk.CTkFont(size=24, weight="bold"))
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Slayer Drops", font=ctk.CTkFont(size=24, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
         # Hiscores Username
@@ -393,7 +393,7 @@ class RS3DropLookupApp(ctk.CTk):
         try:
             url = f"https://runescape.wiki/w/{formatted_name}"
             if force: url += f"?action=purge&_={int(time.time())}"
-            headers = {"User-Agent": "SlayerDropsPro/5.0"}
+            headers = {"User-Agent": "SlayerDrops/5.0"}
             response = requests.get(url, headers=headers)
             if response.status_code == 404:
                 self.after(0, self.show_error, f"Monster '{monster}' not found.")
