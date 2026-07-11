@@ -1,0 +1,63 @@
+name: Build and Release Standalones
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on version tags (e.g., v1.0.0)
+  workflow_dispatch: # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install System Dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-tk
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build Executable (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          python -m PyInstaller --noconfirm --onefile --windowed --icon="icon.ico" --add-data "icon.ico;." --name "SlayerDrops-Windows" app.py
+
+      - name: Build Executable (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          python -m PyInstaller --noconfirm --onefile --windowed --icon="icon.ico" --add-data "icon.ico:." --name "SlayerDrops-${{ runner.os }}" app.py
+
+      - name: Zip macOS App Bundle
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd dist
+          zip -r SlayerDrops-macOS.zip "SlayerDrops-macOS.app"
+
+      - name: Upload Artifacts to Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/SlayerDrops-Windows.exe
+            dist/SlayerDrops-Linux
+            dist/SlayerDrops-macOS.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
