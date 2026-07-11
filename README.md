@@ -15,7 +15,16 @@ Slayer Drops is an elite-tier drop tracker, expected profit calculator, and mons
 
 ---
 
-## 🚀 Setup & Installation
+## 📥 Download (Pre-Compiled Releases)
+Don't want to mess with Python or Node.js? No problem! 
+
+This repository is equipped with a **fully automated CI/CD pipeline**. Every time a new version is pushed, our GitHub Actions workflow automatically compiles pristine, standalone applications for **Windows, macOS, and Linux**. 
+
+You can instantly download the latest, ready-to-run versions directly from the **[Releases Tab](https://github.com/cook0001/RS3_Slayer_Drops_App/releases)**.
+
+---
+
+## 🚀 Setup & Installation (For Developers)
 
 ### Option 1: Standalone Desktop App (Python)
 If you prefer a standalone desktop window on your second monitor. Fully supported on Windows, macOS, and Linux.
