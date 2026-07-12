@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import * as chatbox from "alt1/chatbox";
+import ChatBoxReader from "alt1/chatbox";
 import './App.css';
 
-const ChatBoxReader = chatbox.default || chatbox;
 const reader = new ChatBoxReader();
 
 function App() {
