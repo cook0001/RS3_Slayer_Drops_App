@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
-import ChatBoxReader from "alt1/chatbox";
+import * as chatboxModule from "alt1/chatbox";
 import './App.css';
 
+// Safely extract the ChatBoxReader constructor from the CommonJS interop wrapper
+let ChatBoxReader = chatboxModule;
+while (typeof ChatBoxReader !== 'function' && ChatBoxReader.default) {
+  ChatBoxReader = ChatBoxReader.default;
+}
 const reader = new ChatBoxReader();
 
 function App() {
