@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import * as a1lib from "alt1/base";
 import * as chatbox from "alt1/chatbox";
 import './App.css';
 
@@ -28,7 +27,8 @@ function App() {
             const text = line.text.toLowerCase();
             if (text.includes("drop:") || text.includes("loot:")) {
               const itemName = text.split(":").pop().trim().toLowerCase();
-              autoAddDrop(itemName);
+              const match = drops.find(d => itemName.includes(d.item.toLowerCase()));
+              if (match) addDrop(match);
             }
           });
         }
@@ -46,11 +46,6 @@ function App() {
       return () => clearInterval(timer);
     }
   }, [startTime, totalVal]);
-
-  const autoAddDrop = (namePart) => {
-    const match = drops.find(d => namePart.includes(d.item.toLowerCase()));
-    if (match) addDrop(match);
-  };
 
   const parsePrice = (str) => {
     let clean = str.replace(/,/g, '').replace('Not sold', '0');
@@ -121,7 +116,7 @@ function App() {
   };
 
   const addDrop = (drop) => {
-    if (!startTime) setStartTime(Date.now());
+    setStartTime(prev => prev || Date.now());
     setSession(prev => ({
       ...prev,
       [drop.item]: (prev[drop.item] || 0) + 1
