@@ -45,6 +45,11 @@ If you prefer a standalone desktop window on your second monitor. Fully supporte
 
 ### Option 2: Alt1 Toolkit Overlay (React / Vite)
 If you prefer a transparent overlay seamlessly integrated into your game client via the Alt1 Toolkit.
+
+**🌍 Live Version (Recommended):**
+The Alt1 application is now hosted and deployed automatically via GitHub Pages. You can add it to Alt1 directly by pasting your custom domain URL into the Alt1 browser!
+
+**💻 Running Locally (For Developers):**
 1. Install **Node.js**.
 2. Navigate to the `alt1_react` directory and install dependencies:
    ```bash
@@ -55,7 +60,7 @@ If you prefer a transparent overlay seamlessly integrated into your game client 
    ```bash
    npm run dev
    ```
-4. Open the **Alt1 Toolkit**, go to `Browser`, and type in `http://localhost:5173`. Alternatively, point Alt1 directly to the `appconfig.json` inside the `alt1_web` legacy folder.
+4. Open the **Alt1 Toolkit**, go to `Browser`, and type in `http://localhost:5173`.
 
 ## 📦 Compiling to Standalone Executable
 You can build the Python script into a single, shareable executable using PyInstaller. 
