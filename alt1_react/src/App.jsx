@@ -21,6 +21,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [paused, setPaused] = useState(false);
   const [sortOption, setSortOption] = useState('value-desc');
+  const [dialog, setDialog] = useState(null);
   
   // Alt1 States
   const [alt1Active, setAlt1Active] = useState(false);
@@ -153,7 +154,7 @@ function App() {
       const res = await fetch(`https://runescape.wiki/api.php?action=parse&page=${encodeURIComponent(term.replace(/ /g, '_'))}&format=json&origin=*`);
       const data = await res.json();
       if (data.error) {
-        alert("Monster not found on Wiki.");
+        setDialog({ title: "Search Error", message: "Monster not found on Wiki." });
         setLoading(false);
         return;
       }
@@ -208,7 +209,7 @@ function App() {
       }
     } catch (e) {
       console.error(e);
-      alert("Error fetching Wiki.");
+      setDialog({ title: "Error", message: "Error fetching Wiki." });
     }
     setLoading(false);
   };
@@ -223,17 +224,26 @@ function App() {
   };
 
   const resetSession = () => {
-    if (confirm("Reset tracking session?")) {
-      setSession({});
-      setTotalVal(0);
-      setStartTime(null);
-      setGphr(0);
-      localStorage.removeItem('rs3_slayer_session');
-    }
+    setDialog({
+      title: "Reset Session",
+      message: "Are you sure you want to reset your tracking session?",
+      isConfirm: true,
+      onConfirm: () => {
+        setSession({});
+        setTotalVal(0);
+        setStartTime(null);
+        setGphr(0);
+        localStorage.removeItem('rs3_slayer_session');
+        setDialog(null);
+      }
+    });
   };
 
   const requestPermissions = () => {
-    alert("Alt1 is missing pixel permissions.\n\n1. Click the wrench icon in the top right of this Alt1 window.\n2. Go to the Permissions tab.\n3. Check the box for 'Pixel' reading.\n4. Reload the app.");
+    setDialog({
+      title: "Missing Permissions",
+      message: "Alt1 is missing pixel permissions.\n\n1. Click the wrench icon in the top right of this Alt1 window.\n2. Go to the Permissions tab.\n3. Check the box for 'Pixel' reading.\n4. Reload the app."
+    });
   };
 
   // Sorting Logic
@@ -332,6 +342,25 @@ function App() {
           </div>
         ))}
       </div>
+
+      {dialog && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>{dialog.title}</h3>
+            <p style={{ whiteSpace: "pre-wrap", color: "var(--text-muted)" }}>{dialog.message}</p>
+            <div className="modal-actions">
+              <button className="btn-secondary" onClick={() => setDialog(null)}>
+                {dialog.isConfirm ? "Cancel" : "Close"}
+              </button>
+              {dialog.isConfirm && (
+                <button className="btn-primary" onClick={dialog.onConfirm}>
+                  Confirm
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
