@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import * as chatboxModule from "alt1/chatbox";
 import './App.css';
 
-// Safely extract the ChatBoxReader constructor from the CommonJS interop wrapper
+// Safely extract the ChatBoxReader constructor
 let ChatBoxReader = chatboxModule;
 while (typeof ChatBoxReader !== 'function' && ChatBoxReader.default) {
   ChatBoxReader = ChatBoxReader.default;
@@ -14,21 +14,62 @@ function App() {
   const [session, setSession] = useState({});
   const [totalVal, setTotalVal] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
   const [info, setInfo] = useState(null);
   const [gphr, setGphr] = useState(0);
   const [startTime, setStartTime] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [sortOption, setSortOption] = useState('value-desc');
+  
+  // Alt1 States
   const [alt1Active, setAlt1Active] = useState(false);
   const [chatboxFound, setChatboxFound] = useState(false);
+  const [hasPermissions, setHasPermissions] = useState(true);
 
+  // Load session from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('rs3_slayer_session');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        setSession(data.session || {});
+        setTotalVal(data.totalVal || 0);
+        setStartTime(data.startTime || null);
+        setDrops(data.drops || []);
+        setInfo(data.info || null);
+      } catch (e) {
+        console.error("Failed to load session", e);
+      }
+    }
+  }, []);
+
+  // Save session to localStorage
+  useEffect(() => {
+    if (Object.keys(session).length > 0 || drops.length > 0) {
+      localStorage.setItem('rs3_slayer_session', JSON.stringify({
+        session, totalVal, startTime, drops, info
+      }));
+    }
+  }, [session, totalVal, startTime, drops, info]);
+
+  // Alt1 Initialization and Loop
   useEffect(() => {
     if (window.alt1) {
       setAlt1Active(true);
+      
+      // Check permissions
+      if (!window.alt1.permissionPixel) {
+        setHasPermissions(false);
+      }
+
       const interval = setInterval(() => {
+        if (paused || !hasPermissions) return;
+
         if (!reader.pos) {
           const found = reader.find();
           if (found) setChatboxFound(true);
-          return; // Wait for next tick to read
+          return;
         }
         
         let lines = reader.read();
@@ -45,17 +86,36 @@ function App() {
       }, 500);
       return () => clearInterval(interval);
     }
-  }, [drops]);
+  }, [drops, paused, hasPermissions]);
 
+  // GP/HR Timer
   useEffect(() => {
-    if (startTime) {
+    if (startTime && !paused) {
       const timer = setInterval(() => {
         const elapsed = (Date.now() - startTime) / 1000;
         setGphr(elapsed > 0 ? (totalVal / (elapsed / 3600)) : 0);
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [startTime, totalVal]);
+  }, [startTime, totalVal, paused]);
+
+  // Search Autocomplete
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchTerm.length >= 3) {
+        try {
+          const res = await fetch(`https://runescape.wiki/api.php?action=opensearch&search=${encodeURIComponent(searchTerm)}&limit=5&format=json&origin=*`);
+          const data = await res.json();
+          setSuggestions(data[1] || []);
+        } catch (e) {
+          console.error("Autocomplete failed", e);
+        }
+      } else {
+        setSuggestions([]);
+      }
+    }, 300);
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm]);
 
   const parsePrice = (str) => {
     let clean = str.replace(/,/g, '').replace('Not sold', '0');
@@ -65,21 +125,43 @@ function App() {
     return Math.floor(sum / matches.length);
   };
 
-  const searchWiki = async () => {
-    if (!searchTerm) return;
-    setLoading(true);
+  const fetchLivePrices = async (items) => {
     try {
-      const res = await fetch(`https://runescape.wiki/api.php?action=parse&page=${encodeURIComponent(searchTerm.replace(/ /g, '_'))}&format=json&origin=*`);
+      const names = items.map(d => d.item).join('|');
+      const res = await fetch(`https://api.weirdgloop.org/exchange/history/rs/latest?name=${encodeURIComponent(names)}`);
+      const data = await res.json();
+      
+      return items.map(d => {
+        if (data[d.item] && data[d.item].price) {
+          return { ...d, price: data[d.item].price };
+        }
+        return d;
+      });
+    } catch (e) {
+      console.error("Failed to fetch live prices", e);
+      return items;
+    }
+  };
+
+  const executeSearch = async (term) => {
+    if (!term) return;
+    setSearchTerm(term);
+    setSuggestions([]);
+    setLoading(true);
+    
+    try {
+      const res = await fetch(`https://runescape.wiki/api.php?action=parse&page=${encodeURIComponent(term.replace(/ /g, '_'))}&format=json&origin=*`);
       const data = await res.json();
       if (data.error) {
-        alert("Monster not found.");
+        alert("Monster not found on Wiki.");
         setLoading(false);
         return;
       }
+      
       const parser = new DOMParser();
       const doc = parser.parseFromString(data.parse.text['*'], "text/html");
       
-      const newDrops = [];
+      let newDrops = [];
       const tables = doc.querySelectorAll('table.wikitable');
       tables.forEach(table => {
         const headers = Array.from(table.querySelectorAll('th')).map(th => th.innerText.trim().toLowerCase());
@@ -103,6 +185,12 @@ function App() {
           }
         }
       });
+
+      // Fetch live prices to overwrite wiki static prices
+      if (newDrops.length > 0) {
+        newDrops = await fetchLivePrices(newDrops);
+      }
+      
       setDrops(newDrops);
       
       const infobox = doc.querySelector('table.infobox');
@@ -134,44 +222,108 @@ function App() {
     setTotalVal(v => v + drop.price);
   };
 
+  const resetSession = () => {
+    if (confirm("Reset tracking session?")) {
+      setSession({});
+      setTotalVal(0);
+      setStartTime(null);
+      setGphr(0);
+      localStorage.removeItem('rs3_slayer_session');
+    }
+  };
+
+  const requestPermissions = () => {
+    if (window.alt1 && window.alt1.events) {
+      window.alt1.events.alt1pressed.push(window.alt1.requestPixelPermission);
+      alert("Press Alt+1 to grant pixel permissions.");
+    }
+  };
+
+  // Sorting Logic
+  const sortedDrops = [...drops].sort((a, b) => {
+    if (sortOption === 'value-desc') return b.price - a.price;
+    if (sortOption === 'value-asc') return a.price - b.price;
+    if (sortOption === 'name-asc') return a.item.localeCompare(b.item);
+    return 0;
+  });
+
   return (
     <div className="App">
       <header>
-        <div className="search-bar">
-          <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Monster Name..." />
-          <button onClick={searchWiki}>Search</button>
+        <div className="search-container">
+          <div className="search-bar">
+            <input 
+              value={searchTerm} 
+              onChange={e => setSearchTerm(e.target.value)} 
+              placeholder="Monster Name..." 
+              onKeyDown={e => e.key === 'Enter' && executeSearch(searchTerm)}
+            />
+            <button onClick={() => executeSearch(searchTerm)}>Search</button>
+          </div>
+          {suggestions.length > 0 && (
+            <div className="suggestions">
+              {suggestions.map((sug, i) => (
+                <div key={i} className="suggestion-item" onClick={() => executeSearch(sug)}>
+                  {sug}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
         {alt1Active && (
-          <div className="alt1-badge">
-            {chatboxFound ? "🟢 Chatbox Found" : "🟡 Searching for Chatbox..."}
+          <div className={`alt1-badge ${!hasPermissions ? 'danger' : chatboxFound ? 'success' : 'warning'}`} 
+               onClick={!hasPermissions ? requestPermissions : undefined}>
+            {!hasPermissions ? "❌ Missing Permissions (Click to Fix)" : 
+             chatboxFound ? "🟢 Chatbox Found" : "🟡 Searching for Chatbox..."}
           </div>
         )}
       </header>
 
       {info && (
         <div className="info-panel">
-          Weakness: <span>{info.weakness}</span> | Style: <span>{info.style}</span>
+          <div>Weakness: <span>{info.weakness}</span></div>
+          <div>Style: <span>{info.style}</span></div>
         </div>
       )}
 
       <div className="tracker-panel">
         <div className="tracker-header">
-          <h2>Tracker</h2>
+          <h2>Session Tracker</h2>
           <span className="gphr">{Math.floor(gphr).toLocaleString()} gp/hr</span>
         </div>
+        
         <div className="total-val">{totalVal.toLocaleString()} gp</div>
+        
+        <div className="tracker-controls">
+          <button onClick={() => setPaused(!paused)}>{paused ? "▶ Resume" : "⏸ Pause"}</button>
+          <button onClick={resetSession}>🔄 Reset</button>
+        </div>
+
         <div className="tracker-items">
           {Object.entries(session).map(([name, count]) => (
             <div key={name} className="tracker-row">
-              <span>{name}</span>
-              <span>x{count}</span>
+              <span className="name">{name}</span>
+              <span className="qty">x{count}</span>
             </div>
           ))}
+          {Object.keys(session).length === 0 && <span style={{color: 'var(--text-muted)'}}>No drops tracked yet.</span>}
         </div>
       </div>
 
+      {drops.length > 0 && (
+        <div className="controls-bar">
+          <h3 style={{margin: 0}}>Loot Table</h3>
+          <select className="sort-select" value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+            <option value="value-desc">Highest Value</option>
+            <option value="value-asc">Lowest Value</option>
+            <option value="name-asc">Alphabetical (A-Z)</option>
+          </select>
+        </div>
+      )}
+
       <div className="drops-list">
-        {loading ? <p>Loading drops...</p> : drops.map((d, i) => (
+        {loading ? <p>Loading drops and live prices...</p> : sortedDrops.map((d, i) => (
           <div className="drop-card" key={i}>
             <img src={d.img} alt={d.item} />
             <div className="details">
@@ -179,7 +331,7 @@ function App() {
               <p>Qty: {d.qty} • Rarity: {d.rarity}</p>
             </div>
             <div className="price">{d.price.toLocaleString()} gp</div>
-            <button className="add-btn" onClick={() => addDrop(d)}>+1</button>
+            <button className="add-btn" onClick={() => addDrop(d)} title="Manually Add">+1</button>
           </div>
         ))}
       </div>
