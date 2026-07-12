@@ -12,6 +12,10 @@ Slayer Drops is an elite-tier drop tracker, expected profit calculator, and mons
   * *Desktop:* Uses PyTesseract & OpenCV to read the game screen and automatically add drops to your log. Works on Windows, macOS, and Linux!
   * *Alt1 Overlay:* Uses Alt1's native `@alt1/chatbox` JavaScript API for flawless, zero-overhead background chat reading.
 * **Ironman Mode**: Shifts focus strictly to High Alchemy values and removes GE prices entirely.
+* **Alt1 Overlay Exclusives**: 
+  * Premium Glassmorphism UI with dark mode support.
+  * LocalStorage Session Persistence—never lose your tracked drops if you close the app!
+  * Smart Search Auto-complete directly linked to the Wiki API.
 
 ---
 
@@ -47,7 +51,11 @@ If you prefer a standalone desktop window on your second monitor. Fully supporte
 If you prefer a transparent overlay seamlessly integrated into your game client via the Alt1 Toolkit.
 
 **🌍 Live Version (Recommended):**
-The Alt1 application is now hosted and deployed automatically via GitHub Pages. You can add it to Alt1 directly by pasting your custom domain URL into the Alt1 browser!
+The Alt1 application is now hosted on a custom domain! You can install it into Alt1 Toolkit with a single click using the link below:
+
+**[➕ One-Click Install to Alt1 Toolkit](alt1://addapp/http://app.armstrader.store/appconfig.json)**
+
+*(Alternatively, you can just type `http://app.armstrader.store` into your normal web browser and click the "Install to Alt1" button!)*
 
 **💻 Running Locally (For Developers):**
 1. Install **Node.js**.
