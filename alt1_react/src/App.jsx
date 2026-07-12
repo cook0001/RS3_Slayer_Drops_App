@@ -15,12 +15,18 @@ function App() {
   const [startTime, setStartTime] = useState(null);
   const [loading, setLoading] = useState(false);
   const [alt1Active, setAlt1Active] = useState(false);
+  const [chatboxFound, setChatboxFound] = useState(false);
 
   useEffect(() => {
     if (window.alt1) {
       setAlt1Active(true);
-      reader.read(); // Initialize reader
       const interval = setInterval(() => {
+        if (!reader.pos) {
+          const found = reader.find();
+          if (found) setChatboxFound(true);
+          return; // Wait for next tick to read
+        }
+        
         let lines = reader.read();
         if (lines) {
           lines.forEach(line => {
@@ -131,7 +137,11 @@ function App() {
           <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Monster Name..." />
           <button onClick={searchWiki}>Search</button>
         </div>
-        {alt1Active && <div className="alt1-badge">🟢 Alt1 Connected</div>}
+        {alt1Active && (
+          <div className="alt1-badge">
+            {chatboxFound ? "🟢 Chatbox Found" : "🟡 Searching for Chatbox..."}
+          </div>
+        )}
       </header>
 
       {info && (
