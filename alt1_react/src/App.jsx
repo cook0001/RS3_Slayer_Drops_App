@@ -233,10 +233,7 @@ function App() {
   };
 
   const requestPermissions = () => {
-    if (window.alt1 && window.alt1.events) {
-      window.alt1.events.alt1pressed.push(window.alt1.requestPixelPermission);
-      alert("Press Alt+1 to grant pixel permissions.");
-    }
+    alert("Alt1 is missing pixel permissions.\n\n1. Click the wrench icon in the top right of this Alt1 window.\n2. Go to the Permissions tab.\n3. Check the box for 'Pixel' reading.\n4. Reload the app.");
   };
 
   // Sorting Logic
