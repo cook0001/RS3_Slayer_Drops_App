@@ -5,5 +5,7 @@
   "id": "cook-slayer-drops-tracker",
   "appUrl": "https://app.armstrader.store/",
   "configUrl": "https://app.armstrader.store/appconfig.json",
+  "icon": "icon.png",
+  "iconcolor": "131,211,255",
   "permissions": ["pixel"]
 }
