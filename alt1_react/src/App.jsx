@@ -296,8 +296,10 @@ function App() {
             </div>
             <button className="alt1-badge" style={{background: 'var(--accent)', color: 'white', border: 'none', cursor: 'pointer', padding: '0 15px'}} 
                     onClick={() => {
-                      if (window.alt1 && window.alt1.identifyAppUrl) {
-                        window.alt1.identifyAppUrl('https://app.armstrader.store/appconfig.json');
+                      try {
+                        window.location.href = 'alt1://addapp/http://app.armstrader.store/appconfig.json';
+                      } catch (e) {
+                        setDialog({ title: "Install Failed", message: "Could not trigger Alt1 installation prompt.\nError: " + e.message });
                       }
                     }}>
               ➕ Force Install App
