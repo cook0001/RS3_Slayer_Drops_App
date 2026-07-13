@@ -1,11 +1,10 @@
 {
+  "appName": "Slayer Drops Tracker",
   "name": "Slayer Drops Tracker",
-  "description": "Automatically track RS3 Slayer drops directly from your chatbox. Features live GE pricing, auto-complete search, and persistent tracking sessions.",
-  "version": "1.0.0",
-  "id": "cook-slayer-drops-tracker",
+  "description": "Automatically track RS3 Slayer drops directly from your chatbox.",
   "appUrl": "https://app.armstrader.store/",
   "configUrl": "https://app.armstrader.store/appconfig.json",
-  "icon": "icon.png",
-  "iconcolor": "131,211,255",
-  "permissions": ["pixel"]
+  "iconUrl": "https://app.armstrader.store/icon.png",
+  "icon": "https://app.armstrader.store/icon.png",
+  "permissions": "pixel"
 }
