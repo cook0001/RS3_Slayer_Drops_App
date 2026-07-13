@@ -77,9 +77,20 @@ function App() {
           lines.forEach(line => {
             const text = line.text.toLowerCase();
             if (text.includes("drop:") || text.includes("loot:")) {
-              const itemName = text.split(":").pop().trim().toLowerCase();
-              const match = drops.find(d => itemName.includes(d.item.toLowerCase()));
-              if (match) addDrop(match);
+              const afterColon = text.split(":").pop().trim();
+              let qty = 1;
+              let itemNameStr = afterColon;
+              
+              // Handle '5 x Item' or '5,000 x Item' format
+              const xMatch = afterColon.match(/^([\d,]+)\s*x\s+(.+)$/);
+              if (xMatch) {
+                qty = parseInt(xMatch[1].replace(/,/g, ''), 10) || 1;
+                itemNameStr = xMatch[2];
+              }
+
+              // Exact match preferred to avoid substring false positives
+              const match = drops.find(d => d.item.toLowerCase() === itemNameStr.toLowerCase());
+              if (match) addDrop(match, qty);
             }
           });
         }
@@ -213,13 +224,13 @@ function App() {
     setLoading(false);
   };
 
-  const addDrop = (drop) => {
+  const addDrop = (drop, qty = 1) => {
     setStartTime(prev => prev || Date.now());
     setSession(prev => ({
       ...prev,
-      [drop.item]: (prev[drop.item] || 0) + 1
+      [drop.item]: (prev[drop.item] || 0) + qty
     }));
-    setTotalVal(v => v + drop.price);
+    setTotalVal(v => v + (drop.price * qty));
   };
 
   const resetSession = () => {
@@ -236,6 +247,27 @@ function App() {
         setDialog(null);
       }
     });
+  };
+
+  const exportData = () => {
+    if (Object.keys(session).length === 0) {
+      setDialog({ title: "Export Error", message: "No data to export." });
+      return;
+    }
+    let csv = "Item,Quantity,Total Value (gp)\n";
+    for (const [name, count] of Object.entries(session)) {
+      // Try to get price from drops lookup, if missing estimate from total (simplistic)
+      const dropObj = drops.find(d => d.item === name);
+      const price = dropObj ? dropObj.price : 0;
+      csv += `"${name}",${count},${count * price}\n`;
+    }
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `slayer_drops_export_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const requestPermissions = () => {
@@ -307,6 +339,7 @@ function App() {
         
         <div className="tracker-controls">
           <button onClick={() => setPaused(!paused)}>{paused ? "▶ Resume" : "⏸ Pause"}</button>
+          <button onClick={exportData}>💾 Export</button>
           <button onClick={resetSession}>🔄 Reset</button>
         </div>
 
