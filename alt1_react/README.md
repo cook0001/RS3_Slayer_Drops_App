@@ -11,7 +11,7 @@ The application is deployed automatically to GitHub Pages on our custom domain. 
 
 *(Alternatively, you can manually copy and paste this URI into your browser's address bar:)*
 ```text
-alt1://addapp/https://app.armstrader.store/appconfig.json
+alt1://addapp/http://app.armstrader.store/appconfig.json
 ```
 
 ## 💻 Local Development Setup

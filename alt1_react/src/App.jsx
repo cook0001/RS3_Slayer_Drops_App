@@ -285,7 +285,7 @@ function App() {
              chatboxFound ? "🟢 Chatbox Found" : "🟡 Searching for Chatbox..."}
           </div>
         ) : (
-          <a href="alt1://addapp/https://app.armstrader.store/appconfig.json" className="alt1-badge" style={{textDecoration: 'none', background: 'var(--accent)', color: 'white', borderColor: 'transparent'}}>
+          <a href="alt1://addapp/http://app.armstrader.store/appconfig.json" className="alt1-badge" style={{textDecoration: 'none', background: 'var(--accent)', color: 'white', borderColor: 'transparent'}}>
             ➕ Install to Alt1
           </a>
         )}
