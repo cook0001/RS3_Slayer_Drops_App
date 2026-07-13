@@ -51,11 +51,12 @@ If you prefer a standalone desktop window on your second monitor. Fully supporte
 If you prefer a transparent overlay seamlessly integrated into your game client via the Alt1 Toolkit.
 
 **🌍 Live Version (Recommended):**
-The Alt1 application is now hosted on a custom domain! You can install it into Alt1 Toolkit with a single click using the link below:
+The Alt1 application is now hosted on a custom domain! Due to GitHub security rules blocking custom app links, you must visit the website directly to install it:
 
-**[➕ One-Click Install to Alt1 Toolkit](alt1://addapp/https://app.armstrader.store/appconfig.json)**
+1. Navigate to **[https://app.armstrader.store](https://app.armstrader.store)** in your normal web browser.
+2. Click the blue **"➕ Install to Alt1"** button in the top right corner!
 
-*(Alternatively, you can just type `https://app.armstrader.store` into your normal web browser and click the "Install to Alt1" button!)*
+*(Alternatively, you can manually copy and paste this URI into your browser's address bar: `alt1://addapp/https://app.armstrader.store/appconfig.json`)*
 
 **💻 Running Locally (For Developers):**
 1. Install **Node.js**.

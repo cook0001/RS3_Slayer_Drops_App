@@ -4,11 +4,12 @@ This is the Alt1 Toolkit integration for the Slayer Drops application, rewritten
 
 ## 🚀 Live Version
 
-The application is deployed automatically to GitHub Pages on our custom domain. You can install it into Alt1 Toolkit with a single click:
+The application is deployed automatically to GitHub Pages on our custom domain. Due to GitHub security rules blocking custom app links, you must visit the website directly to install it:
 
-**[➕ One-Click Install to Alt1 Toolkit](alt1://addapp/https://app.armstrader.store/appconfig.json)**
+1. Navigate to **[https://app.armstrader.store](https://app.armstrader.store)** in your standard web browser (Chrome, Edge).
+2. Click the blue **"➕ Install to Alt1"** button in the top right corner!
 
-Alternatively, you can navigate to `https://app.armstrader.store` in your standard web browser (Chrome, Edge) and click the "Install to Alt1" button in the top right corner.
+*(Alternatively, you can manually copy and paste this URI into your browser's address bar: `alt1://addapp/https://app.armstrader.store/appconfig.json`)*
 
 ## 💻 Local Development Setup
 
