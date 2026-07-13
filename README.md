@@ -60,6 +60,34 @@ The Alt1 application is now hosted on a custom domain! The most reliable way to 
 
 *(Alternative: You can visit `https://app.armstrader.store` in Chrome/Edge and click the "Install to Alt1" button in the top right, provided your Windows `alt1://` protocol handler is working correctly.)*
 
+---
+
+### ⚠️ Troubleshooting Alt1 Installation (SPA Issues)
+Because this tracker is built as a modern Single Page Application (SPA), Alt1's built-in browser sometimes gets confused and fails to render the "Add App" button automatically. If you are having trouble installing the app, follow these steps:
+
+**Step 1: Use the Explicit Config Link**
+Instead of the standard website address, you must give Alt1 the exact configuration manifest path.
+1. Open the Alt1 Toolkit on your desktop.
+2. Open Alt1's built-in **Browser**.
+3. Paste this exact address into Alt1's top browser bar and hit Enter: 
+   `https://app.armstrader.store/appconfig.json`
+4. The yellow "Add App" banner should now forcefully appear at the top of your Alt1 screen.
+
+**Step 2: Use the Direct Web-Add Protocol**
+If pasting the `.json` string inside the browser fails, we can use Alt1's special installation protocol through your native Windows command prompt to force-inject it.
+1. Right-click your Windows Start button and select **Run** (or press `Windows Key + R`).
+2. Paste this exact string into the box: 
+   `alt1://addapp/https://app.armstrader.store/appconfig.json`
+3. Click OK. Alt1 should force-open a pop-up confirmation asking you to install the app.
+
+**Step 3: Check Alt1's Hardware Acceleration**
+If the screen still goes entirely white or doesn't react at all, your Alt1 internal Chromium build is failing to render the page due to hardware settings:
+1. Open Alt1 **Settings** > **Other** tab.
+2. Toggle the checkmark for **"Use GPU rendering (Hardware Acceleration)"** (if it's on, turn it off; if it's off, turn it on).
+3. Completely restart Alt1 and try Step 1 again.
+
+---
+
 **💻 Running Locally (For Developers):**
 1. Install **Node.js**.
 2. Navigate to the `alt1_react` directory and install dependencies:
