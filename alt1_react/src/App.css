@@ -32,9 +32,9 @@ body {
 }
 
 .App {
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 12px;
 }
 
 /* Header & Search */
@@ -42,32 +42,32 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 10px;
 }
 
 .search-container {
   position: relative;
   flex: 1;
-  max-width: 450px;
+  min-width: 200px;
 }
 
 .search-bar {
   display: flex;
-  gap: 10px;
+  gap: 6px;
 }
 
 .search-bar input {
   flex: 1;
-  padding: 14px 20px;
-  border-radius: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
   border: 1px solid var(--panel-border);
   background: rgba(15, 23, 42, 0.4);
   backdrop-filter: blur(10px);
   color: var(--text-main);
   font-family: inherit;
-  font-size: 15px;
+  font-size: 13px;
   outline: none;
   transition: all 0.3s ease;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
@@ -76,17 +76,17 @@ header {
 .search-bar input:focus {
   border-color: rgba(59, 130, 246, 0.5);
   background: rgba(15, 23, 42, 0.6);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
 .search-bar button {
-  padding: 14px 24px;
+  padding: 8px 14px;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--accent-gradient);
   color: white;
   font-family: 'Outfit', sans-serif;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -94,8 +94,8 @@ header {
 }
 
 .search-bar button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
 .search-bar button:active {
@@ -104,24 +104,25 @@ header {
 
 .suggestions {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(16px);
   border: 1px solid var(--panel-border);
-  border-radius: 12px;
-  max-height: 250px;
+  border-radius: 8px;
+  max-height: 200px;
   overflow-y: auto;
   z-index: 10;
   box-shadow: var(--glass-shadow);
 }
 
 .suggestion-item {
-  padding: 12px 20px;
+  padding: 8px 12px;
   cursor: pointer;
   transition: background 0.2s;
   font-weight: 500;
+  font-size: 13px;
 }
 
 .suggestion-item:hover {
@@ -130,26 +131,26 @@ header {
 
 /* Scrollbar for suggestions */
 .suggestions::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 .suggestions::-webkit-scrollbar-thumb {
   background: rgba(255,255,255,0.2);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 /* Alt1 Status Badge */
 .alt1-badge {
-  padding: 10px 20px;
-  border-radius: 24px;
+  padding: 6px 12px;
+  border-radius: 16px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   backdrop-filter: blur(12px);
   border: 1px solid var(--panel-border);
   background: var(--panel-bg);
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  gap: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
 }
 
@@ -167,16 +168,16 @@ header {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--panel-border);
-  border-radius: 20px;
-  padding: 28px;
-  margin-bottom: 32px;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
   box-shadow: var(--glass-shadow);
 }
 
 .info-panel {
   display: flex;
-  gap: 32px;
-  font-size: 16px;
+  gap: 16px;
+  font-size: 13px;
 }
 
 .info-panel span {
@@ -189,50 +190,51 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .tracker-header h2 {
   margin: 0;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.2px;
 }
 
 .gphr {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--success);
   background: rgba(16, 185, 129, 0.15);
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  border-radius: 12px;
   border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .total-val {
-  font-size: 48px;
+  font-size: 32px;
   font-weight: 700;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
   background: linear-gradient(to right, #f8fafc, #cbd5e1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
 }
 
 .tracker-controls {
   display: flex;
-  gap: 12px;
-  margin-bottom: 28px;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
 .tracker-controls button {
-  padding: 10px 18px;
-  border-radius: 10px;
+  padding: 6px 12px;
+  border-radius: 8px;
   border: 1px solid var(--panel-border);
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-main);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-weight: 600;
@@ -242,23 +244,22 @@ header {
 .tracker-controls button:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
 }
 
 .tracker-items {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
 }
 
 .tracker-row {
   background: rgba(0, 0, 0, 0.25);
-  padding: 12px 16px;
-  border-radius: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 15px;
+  font-size: 12px;
   border: 1px solid rgba(255,255,255,0.03);
   transition: background 0.2s;
 }
@@ -269,14 +270,18 @@ header {
 
 .tracker-row .name {
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 6px;
 }
 
 .tracker-row .qty {
   color: #60a5fa;
   font-weight: 700;
   background: rgba(96, 165, 250, 0.15);
-  padding: 2px 8px;
-  border-radius: 12px;
+  padding: 2px 6px;
+  border-radius: 8px;
 }
 
 /* Drops Grid */
@@ -284,24 +289,24 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .controls-bar h3 {
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: -0.5px;
+  margin: 0;
 }
 
 .sort-select {
-  padding: 10px 16px;
-  border-radius: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
   border: 1px solid var(--panel-border);
   background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(10px);
   color: var(--text-main);
   font-family: inherit;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   outline: none;
   cursor: pointer;
@@ -314,8 +319,8 @@ header {
 
 .drops-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
 }
 
 .drop-card {
@@ -323,13 +328,13 @@ header {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--panel-border);
-  border-radius: 16px;
-  padding: 24px 20px;
+  border-radius: 12px;
+  padding: 12px;
   text-align: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .drop-card::before {
@@ -338,13 +343,13 @@ header {
   top: 0; left: 0; right: 0; height: 100%;
   background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
   pointer-events: none;
 }
 
 .drop-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(59, 130, 246, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px -5px rgba(0, 0, 0, 0.3), 0 0 10px rgba(59, 130, 246, 0.15);
   border-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -353,46 +358,46 @@ header {
 }
 
 .drop-card img {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
-  margin-bottom: 16px;
-  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+  margin-bottom: 8px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .drop-card h4 {
-  margin: 0 0 8px 0;
-  font-size: 16px;
+  margin: 0 0 4px 0;
+  font-size: 13px;
   font-weight: 600;
 }
 
 .drop-card p {
   margin: 0;
-  font-size: 13px;
+  font-size: 11px;
   color: var(--text-muted);
   font-weight: 500;
 }
 
 .drop-card .price {
-  margin-top: 16px;
-  font-size: 17px;
+  margin-top: 8px;
+  font-size: 13px;
   font-weight: 700;
   color: #34d399;
 }
 
 .add-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.05);
   background: rgba(255, 255, 255, 0.05);
   color: white;
   font-family: 'Outfit', sans-serif;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
