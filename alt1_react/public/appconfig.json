@@ -3,6 +3,7 @@
   "description": "Automatically track RS3 Slayer drops directly from your chatbox. Features live GE pricing, auto-complete search, and persistent tracking sessions.",
   "version": "1.0.0",
   "id": "cook-slayer-drops-tracker",
-  "appUrl": "index.html",
+  "appUrl": "https://app.armstrader.store/",
+  "configUrl": "https://app.armstrader.store/appconfig.json",
   "permissions": ["pixel"]
 }
