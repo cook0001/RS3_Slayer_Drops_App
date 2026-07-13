@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as chatboxModule from "alt1/chatbox";
+import * as a1lib from "alt1/base";
 import './App.css';
 
 // Safely extract the ChatBoxReader constructor
@@ -58,6 +59,13 @@ function App() {
   useEffect(() => {
     if (window.alt1) {
       setAlt1Active(true);
+      
+      // Force Alt1 to recognize the app and show the install prompt if not added
+      try {
+        a1lib.identifyApp('https://app.armstrader.store/appconfig.json');
+      } catch (e) {
+        console.warn("Could not identify app automatically", e);
+      }
       
       // Check permissions
       if (!window.alt1.permissionPixel) {
