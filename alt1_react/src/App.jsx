@@ -58,16 +58,6 @@ function App() {
   useEffect(() => {
     if (window.alt1) {
       setAlt1Active(true);
-      
-      // Force Alt1 to recognize the app and show the install prompt if not added
-      try {
-        if (window.alt1.identifyAppUrl) {
-          window.alt1.identifyAppUrl('https://app.armstrader.store/appconfig.json');
-        }
-      } catch (e) {
-        console.warn("Could not identify app automatically", e);
-      }
-      
       // Check permissions
       if (!window.alt1.permissionPixel) {
         setHasPermissions(false);
@@ -288,22 +278,10 @@ function App() {
         </div>
 
         {alt1Active ? (
-          <div style={{display: 'flex', gap: '10px'}}>
-            <div className={`alt1-badge ${!hasPermissions ? 'danger' : chatboxFound ? 'success' : 'warning'}`} 
-                 onClick={!hasPermissions ? requestPermissions : undefined}>
-              {!hasPermissions ? "❌ Missing Permissions (Click to Fix)" : 
-               chatboxFound ? "🟢 Chatbox Found" : "🟡 Searching for Chatbox..."}
-            </div>
-            <button className="alt1-badge" style={{background: 'var(--accent)', color: 'white', border: 'none', cursor: 'pointer', padding: '0 15px'}} 
-                    onClick={() => {
-                      try {
-                        window.location.href = 'alt1://addapp/http://app.armstrader.store/appconfig.json';
-                      } catch (e) {
-                        setDialog({ title: "Install Failed", message: "Could not trigger Alt1 installation prompt.\nError: " + e.message });
-                      }
-                    }}>
-              ➕ Force Install App
-            </button>
+          <div className={`alt1-badge ${!hasPermissions ? 'danger' : chatboxFound ? 'success' : 'warning'}`} 
+               onClick={!hasPermissions ? requestPermissions : undefined}>
+            {!hasPermissions ? "❌ Missing Permissions (Click to Fix)" : 
+             chatboxFound ? "🟢 Chatbox Found" : "🟡 Searching for Chatbox..."}
           </div>
         ) : (
           <a href="alt1://addapp/http://app.armstrader.store/appconfig.json" className="alt1-badge" style={{textDecoration: 'none', background: 'var(--accent)', color: 'white', borderColor: 'transparent'}}>
