@@ -56,7 +56,10 @@ The Alt1 application is now hosted on a custom domain! Due to GitHub security ru
 1. Navigate to **[https://app.armstrader.store](https://app.armstrader.store)** in your normal web browser.
 2. Click the blue **"➕ Install to Alt1"** button in the top right corner!
 
-*(Alternatively, you can manually copy and paste this URI into your browser's address bar: `alt1://addapp/https://app.armstrader.store/appconfig.json`)*
+*(Alternatively, you can manually copy and paste this URI into your browser's address bar:)*
+```text
+alt1://addapp/https://app.armstrader.store/appconfig.json
+```
 
 **💻 Running Locally (For Developers):**
 1. Install **Node.js**.
